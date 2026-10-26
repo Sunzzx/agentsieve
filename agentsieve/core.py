@@ -8,7 +8,7 @@ from __future__ import annotations
 import re
 from enum import Enum
 from typing import Sequence, Any
-from pydantic import BaseModel, Field
+from dataclasses import dataclass, field
 
 from agentsieve.token_budget import TokenMetrics, compute_metrics, estimate_tokens
 from agentsieve.ast_pruner import distill_code
@@ -27,14 +27,15 @@ class ContentKind(str, Enum):
     GENERIC_LOG = "generic_log"
 
 
-class DistillationResult(BaseModel):
+@dataclass
+class DistillationResult:
     kind: ContentKind
     original_tokens: int
     distilled_tokens: int
     saved_tokens: int
     savings_percent: float
     distilled_text: str
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class AgentSieve:
